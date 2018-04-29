@@ -9,6 +9,11 @@ function [MS] = getRandMS(M = 10, Xc = 0, Yc = 0, Rc = 500)
         % y         : y co-ordinate (unit is meters)
         % d_refcell : Distance from eNB of Referece Cell (unit is meters)
         % distance  : Array of Distances from BS(eNB)s travelled in Anti-Clock wise sense in 1st Tier.
+        % Other Parameters---------------------------------
+        % SINR      : Single value (ratio) - WideBand SINR
+        % SINRk     : Array (ratio) - for all RBs
+        % drate_wb  : Wide-Band Expected Data-Rate for ith user at time t => di(t)
+        % drate_rb_array : Expected Data-Rate for ith user at time t on "k-th" Resource Block(RB)
 
     R = Rc*cos(pi/6);
 

@@ -53,5 +53,10 @@ function [MS] = getSINRs(MS)
             denominator = denominator + ( gain(1+bs_index) )/( ( MS(i).distance(bs_index) )^gamma );
         end
         MS(i).SINR = numerator/denominator;
+
+        % Wide-Band Expected Data-Rate for ith user at time t => di(t)
+        MS(i).drate_wb = log2(1 + MS(i).SINR);
+        % Expected Data-Rate for ith user at time t on "k-th" Resource Block(RB)
+        MS(i).drate_rb_array = log2(1 + MS(i).SINRk);
     end
 endfunction
