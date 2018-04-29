@@ -1,4 +1,4 @@
-# Using GNU Octave version 4.2.1
+% Using GNU Octave version 4.2.1
 clc; clear; close;
 tic;
 
@@ -8,3 +8,4 @@ endif
 
 % Generate 10 User Equipments (MSs) in Center Cell.
 MS = getRandMS(10, 0, 0, 500);
+MS = getSINRs(MS);

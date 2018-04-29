@@ -5,14 +5,18 @@ function [MS] = getRandMS(M = 10, Xc = 0, Yc = 0, Rc = 500)
 
     % Output Arguments:
     % MS : It is an array of Objects, with parameters:
-        % x : x co-ordinate (unit is meters)
-        % y : y co-ordinate (unit is meters)
-        % distance : unit is meters
+        % x         : x co-ordinate (unit is meters)
+        % y         : y co-ordinate (unit is meters)
+        % d_refcell : Distance from eNB of Referece Cell (unit is meters)
+        % distance  : Array of Distances from BS(eNB)s travelled in Anti-Clock wise sense in 1st Tier.
 
     R = Rc*cos(pi/6);
 
     X = Rc*[1, cos(pi/3), -cos(pi/3), -1, -cos(pi/3), cos(pi/3)];
     Y = Rc*[0, sin(pi/3), sin(pi/3), 0, -sin(pi/3), -sin(pi/3)];
+
+    BSx = 2*R*cos( (0:5)*pi/3 );
+    BSy = 2*R*sin( (0:5)*pi/3 );
 
     x_temp = -Rc + 2*Rc*rand(1,2.5*M);
     y_temp = -R + 2*R*rand(1,2.5*M);
@@ -31,8 +35,10 @@ function [MS] = getRandMS(M = 10, Xc = 0, Yc = 0, Rc = 500)
             % Positions
             MS(index).x = Xc + x_coordinate(index);
             MS(index).y = Yc + y_coordinate(index);
-            MS(index).distance = sqrt( MS(index).x^2 + MS(index).y^2 );
-
+            MS(index).d_refcell = sqrt( MS(index).x^2 + MS(index).y^2 );
+            for bs_index = 1:6
+                MS(index).distance = sqrt( (BSx - MS(index).x ).^2 + (BSy - MS(index).y ).^2 );
+            end
         end
     else
         disp('Recursive call within getRandMS fn');
