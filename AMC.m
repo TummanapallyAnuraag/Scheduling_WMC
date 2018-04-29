@@ -1,4 +1,4 @@
-function [bt_errr_rt_qpsk,bt_errr_rt_sixteenqam] = AMC(fc,d,ber=0.1,ttl_symbl=1)
+function [bt_errr_rt_qpsk,bt_errr_rt_sixteenqam,bt_errr_rt_sixtyfourqam] = AMC(fc,d,berp=0.1,ttl_symbl=1)
 
 pkg load signal;
 pkg load nan;
@@ -88,9 +88,10 @@ endfor
 bt_errr_rt_qpsk = bt_errr/(2*ttl_symbl)
 
 % bit error rate for 16QAM
-ber = [];
+
+e = 0;
 for k = 1:ttl_symbl
-    e = 0;
+    
     tx_bt = dec2bin(randi([1 16],1,1),4); %save the symbol choosed to compare at the receiver
 
     if (tx_bt(1:2) == '00')
@@ -133,17 +134,6 @@ for k = 1:ttl_symbl
 
     % detection
 
-    % if (rx_sym1_int > 0 )
-    %   fin_sym1 = A;
-    % elseif (rx_sym1_int < 0)
-    %   fin_sym1 = -A;
-    % endif
-
-    % if (rx_sym2_int > 0)
-    %   fin_sym2 = A;
-    % elseif (rx_sym2_int < 0)
-    %   fin_sym2 = -A;
-    % endif
     sym = [A,-A,2*A,-2*A];
     bits_rx = ['00','01','10','11'];
     for l=1:length(sym)
@@ -157,8 +147,82 @@ for k = 1:ttl_symbl
     endfor
     rerr = tx_bt(1:2) == fin_sym1;
     imerr = tx_bt(3:4) == fin_sym2;
-    e = (2-sum(rerr(:)))+(2-sum(imerr(:)));
-    ber(k) = e/4*ttl_symbl; 
+    e = e+(2-sum(rerr(:)))+(2-sum(imerr(:)));
+    
 endfor
 
-bt_errr_rt_sixteenqam =mean(ber)
+bt_errr_rt_sixteenqam = e/(4*ttl_symbl);
+
+% bit error rate for 64QAM
+
+ ee = 0;
+for k = 1:ttl_symbl
+   
+    tx_bt = dec2bin(randi([1 64],1,1),6); %save the symbol choosed to compare at the receiver
+
+    if (tx_bt(1:3) == '000' || tx_bt(1:3) == '001')
+      tx_sym_re = A;
+    elseif (tx_bt(1:3) == '010') 
+      tx_sym_re = 2*A;
+    elseif (tx_bt(1:3) == '011') 
+      tx_sym_re = 3*A;
+    elseif (tx_bt(1:3) == '100'|| tx_bt(1:3) == '101') 
+      tx_sym_re = -A;
+    elseif (tx_bt(1:3) == '110') 
+      tx_sym_re = -2*A;
+    elseif (tx_bt(1:3) == '111') 
+      tx_sym_re = -3*A;
+    end
+
+   if (tx_bt(4:6) == '000' || tx_bt(4:6) == '001')
+      tx_sym_im = A;
+    elseif (tx_bt(4:6) == '010') 
+      tx_sym_im = 2*A;
+    elseif (tx_bt(4:6) == '011') 
+      tx_sym_im = 3*A;
+    elseif (tx_bt(4:6) == '100'|| tx_bt(4:6) == '101') 
+      tx_sym_im = -A;
+    elseif (tx_bt(4:6) == '110') 
+      tx_sym_im = -2*A;
+    elseif (tx_bt(4:6) == '111') 
+      tx_sym_im = -3*A;
+    end
+
+    tx_sym = tx_sym_re*cos(2*pi*fc*t)-tx_sym_im*sin(2*pi*fc*t); % transmitted symbol
+    h = hx(k)+j*hy(k);  %channel distribution
+
+    %received symbol
+
+    rx_sym = h*pathloss*tx_sym+N(k);
+
+    % demodulation
+    
+    rx_sym_h = rx_sym*conj(h);
+    rx_sym1 = real(rx_sym_h).*carrier;
+    rx_sym2 = real(rx_sym_h).*crrr_phs_shftd;
+
+    %integration
+
+    rx_sym1_int = (sum(rx_sym1)/fs)*2/T;
+    rx_sym2_int = (sum(rx_sym2)/fs)*2/T;
+
+    % detection
+
+    sym = [A,A,2*A,3*A,-A,-A,-2*A,-3*A];
+    bits_rx = ['000','001','010','011','100','101','110','111'];
+    for l=1:length(sym)
+      err(l) = (sym(l)-rx_sym1_int)^2;
+      [~,minerr] = min(err);
+      fin_sym1 = bits_rx(minerr);
+
+      err1(l) = (sym(l)-rx_sym1_int)^2;
+      [~,minerr] = min(err1);
+      fin_sym2 = bits_rx(minerr);
+    endfor
+    rerr = tx_bt(1:2) == fin_sym1;
+    imerr = tx_bt(3:4) == fin_sym2;
+    ee = ee + (3-sum(rerr(:)))+(3-sum(imerr(:)));
+    
+endfor
+
+bt_errr_rt_sixtyfourqam = ee/(6*ttl_symbl);
