@@ -1,4 +1,4 @@
-function [bt_errr_rt_qpsk,bt_errr_rt_sixteenqam,bt_errr_rt_sixtyfourqam,data] = AMC(fc,d,berp=0.5,repetitions=1)
+function [datarate] = AMC(fc=7500,d,berp=0.45,repetitions=1)
 
 pkg load signal;
 pkg load nan;
@@ -8,13 +8,13 @@ sigma = 1;    % rayleigh parameter
 R = d;              % Distance from transmitter to receiver
 Pl = 128.1+(37.6*log10(R/1000));   % path loss
 fc = fc;   % carrier frequency
-A  = 10^(-3);     % symbol amplitude
+A  = 1  ;     % symbol amplitude
 No = -174; % Noise power 
 permis_ber = berp;
 fs = 3*fc;  % sampling frequency 
 slot_time = 10^(-3);
 
-T = 10^(3)/14; % symbol time
+T = 10^(-3)/14; % symbol time
 bt_errr = 0 ; % to count the error symbols 
 repetitions = repetitions; % total number of times process to repeated for average ber
 t = 0:1/fs:T; 
@@ -36,7 +36,7 @@ pathloss = 10^(-Pl/10); %path loss in Db converted to volts
 ee = 0;
 for k = 1:repetitions
     if(k == 1)
-      tx_bt = dec2bin(randi([1 64],1,1),6) %save the symbol choosed to compare at the receiver
+      tx_bt = dec2bin(randi([0 63],1,1),6) ;%save the symbol choosed to compare at the receiver
     endif
     if (tx_bt(1:3) == '000')
       tx_sym_re = A;
@@ -121,7 +121,7 @@ else
   e = 0;
   for k = 1:repetitions
       if (k == 1)
-        tx_bt = dec2bin(randi([1 16],1,1),4) %save the symbol choosed to compare at the receiver
+        tx_bt = dec2bin(randi([0 15],1,1),4); %save the symbol choosed to compare at the receiver
       endif
       if (tx_bt(1:2) == '00')
         tx_sym_re = A;
@@ -196,9 +196,9 @@ else
     bits = ['01';'10';'11';'00'];
     for k = 1:repetitions
         if (k == 1)
-          tx_bt = randi([1 4],1,1)%save the symbol choosed to compare at the receiver
+          tx_bt = randi([0 3],1,1); %save the symbol choosed to compare at the receiver
         endif
-        tx_sym = cell2mat(symbols(tx_bt)); % transmitted symbol
+        tx_sym = cell2mat(symbols(tx_bt+1)); % transmitted symbol
         h = hx(k)+j*hy(k);  %channel distribution
 
         %received symbol
@@ -231,18 +231,20 @@ else
         endif
 
 
-        if(fin_sym1 != symbl_cmprsn(tx_bt,1))
+        if(fin_sym1 != symbl_cmprsn(tx_bt+1,1))
           bt_errr = bt_errr+1;
         endif
 
-        if (fin_sym2 != symbl_cmprsn(tx_bt,2))
+        if (fin_sym2 != symbl_cmprsn(tx_bt+1,2))
           bt_errr = bt_errr+1;
         endif
         
     endfor
 
-    bt_errr_rt_qpsk = bt_errr/(2*repetitions)
-    data =  bits(tx_bt,:);
+    bt_errr_rt_qpsk = bt_errr/(2*repetitions);
+    data =  bits(tx_bt+1,:);
   endif
 endif
+%  Datarate based on modulation technique used.
 
+datarate   = length(data)/T;

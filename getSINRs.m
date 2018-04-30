@@ -34,6 +34,7 @@ function [MS] = getSINRs(MS)
             denominator = denominator + ( gain(1+bs_index,:) )./( ( MS(i).distance(bs_index) )^gamma );
         end
         MS(i).SINRk = numerator./denominator;
+        MS(i).datarate = AMC(fc=7500,MS(i).d_refcell,0.45,10);
 
         % SINR calculation => for all RBs taken together
         % for 1 TTI
