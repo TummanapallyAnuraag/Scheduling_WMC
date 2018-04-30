@@ -23,7 +23,7 @@ This file is also a function file, aimed to calculate SINR *(Signal to Interfere
 ```
 
 
-## Reference Paper: 
+# Reference Paper: 
 
 * Capozzi, Francesco, et al. “Downlink packet scheduling in LTE cellular networks:Key design issues and a survey.” IEEE Communications Surveys & Tutorials 15.2(2013): 678-700.
 
