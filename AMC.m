@@ -1,9 +1,5 @@
 function [datarate] = AMC(fc=7500,d,berp=0.45,repetitions=1)
 
-pkg load signal;
-pkg load nan;
-pkg load statistics;
-
 sigma = 1;    % rayleigh parameter
 R = d;              % Distance from transmitter to receiver
 Pl = 128.1+(37.6*log10(R/1000));   % path loss
