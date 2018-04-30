@@ -11,7 +11,7 @@ for uc = 20:20:100
 	cell_tputmt = avg_user_tputmt = jain_fair_indexmt = cell_tputtta = avg_user_tputtta = jain_fair_indextta = cell_tputpf = avg_user_tputpf = jain_fair_indexpf = [];
 	UserCount = uc;
 	MS = getRandMS(UserCount, 0, 0, 500);
-	for TTI = 1:10
+	for TTI = 1:100
 		MS = getSINRs(MS);
 		for index = 1 : UserCount
 			METRIC_MT(index,:) = MS(index).drate_rb_array;

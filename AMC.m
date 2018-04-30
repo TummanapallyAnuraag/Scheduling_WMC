@@ -4,7 +4,8 @@ sigma = 1;    % rayleigh parameter
 R = d;              % Distance from transmitter to receiver
 Pl = 128.1+(37.6*log10(R/1000));   % path loss
 fc = fc;   % carrier frequency
-A  = 1  ;     % symbol amplitude
+Pt = 13; % power transmitted in Db
+A  = sqrt(10^(13/10)) ;     % symbol amplitude
 No = -174; % Noise power 
 permis_ber = berp;
 fs = 3*fc;  % sampling frequency 
@@ -243,4 +244,4 @@ else
 endif
 %  Datarate based on modulation technique used.
 
-datarate   = length(data)/T;
+datarate   = (length(data)/T)*15;
