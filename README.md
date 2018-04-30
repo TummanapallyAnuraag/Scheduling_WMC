@@ -18,7 +18,7 @@ Each UE has some parameters associated with it like "x-position" , "y-position" 
 ```
 
 * get SINRs.m
-````
+```
 This file is also a function file, aimed to calculate SINR *(Signal to Interferece Noise Ratio)* values of each UE.
 ```
 
