@@ -5,6 +5,7 @@ function [MS] = getRandMS(M = 10, Xc = 0, Yc = 0, Rc = 500)
 
     % Output Arguments:
     % MS : It is an array of Objects, with parameters:
+        % uid       : Index Number
         % x         : x co-ordinate (unit is meters)
         % y         : y co-ordinate (unit is meters)
         % d_refcell : Distance from eNB of Referece Cell (unit is meters)
@@ -38,6 +39,7 @@ function [MS] = getRandMS(M = 10, Xc = 0, Yc = 0, Rc = 500)
 
         for index = 1 : M
             % Positions
+            MS(index).uid = index;
             MS(index).x = Xc + x_coordinate(index);
             MS(index).y = Yc + y_coordinate(index);
             MS(index).d_refcell = sqrt( MS(index).x^2 + MS(index).y^2 );

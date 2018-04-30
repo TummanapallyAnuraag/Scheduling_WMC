@@ -49,6 +49,7 @@ function [MS] = getSINRs(MS)
 
         % To change the dimension and reset the values...
         numerator = denominator = 0;
+        denominator = N0*BW;
         numerator = ( gain(1) )/( ( MS(i).d_refcell )^gamma );
         for bs_index = 1:6
             denominator = denominator + ( gain(1+bs_index) )/( ( MS(i).distance(bs_index) )^gamma );
