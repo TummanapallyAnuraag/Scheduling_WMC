@@ -1,10 +1,10 @@
-#Scheduling_WMC
+# Scheduling_WMC
 
 This is Course Project of EE-764 of EE Dept, IITB
 It's Aim is to simulate the *scheduling schemes* of LTE
 
 
-#Function Descriptions
+# Function Descriptions
 
 * main.m
 ```
@@ -23,7 +23,7 @@ This file is also a function file, aimed to calculate SINR *(Signal to Interfere
 ```
 
 
-##Reference Paper: 
+## Reference Paper: 
 
 * Capozzi, Francesco, et al. “Downlink packet scheduling in LTE cellular networks:Key design issues and a survey.” IEEE Communications Surveys & Tutorials 15.2(2013): 678-700.
 
