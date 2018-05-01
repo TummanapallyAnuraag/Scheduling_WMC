@@ -244,4 +244,4 @@ else
 endif
 %  Datarate based on modulation technique used.
 
-datarate   = (length(data)/T)*15;
+datarate   = (length(data)/T)*12;
