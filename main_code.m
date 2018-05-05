@@ -1,4 +1,4 @@
-main;
+algo;
 dir = pwd;
 % plot performance metric over number of users Vs different scheduling techniques
 bar(20:20:100,final_jn_fnss_ndx);
