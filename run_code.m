@@ -12,6 +12,7 @@ for uc = 20:20:100
 	UserCount = uc;
 	MS = getRandMS(UserCount, 0, 0, 500);
 	for TTI = 1:100
+		printf('\r[%.2f]%% completed, for %d UEs',TTI,uc);fflush(stdout);
 		MS = getSINRs(MS);
 		for index = 1 : UserCount
 			METRIC_MT(index,:) = MS(index).drate_rb_array;
@@ -25,6 +26,9 @@ for uc = 20:20:100
 		[~,MT_allocation] = max(METRIC_MT);
 		[~,TTA_allocation] = max(METRIC_TTA);
 		[~,PF_allocation] = max(METRIC_PF);
+		if (TTI == 1)
+			PF_allocation = randi(UserCount, 1, length(PF_allocation));
+		end
 		[cell_tputmt(TTI), avg_user_tputmt(TTI), jain_fair_indexmt(TTI)] = getMETRICS(MT_allocation, MS);
 		[cell_tputtta(TTI), avg_user_tputtta(TTI), jain_fair_indextta(TTI)] = getMETRICS(TTA_allocation, MS);
 		[cell_tputpf(TTI), avg_user_tputpf(TTI), jain_fair_indexpf(TTI)] = getMETRICS(PF_allocation, MS);
@@ -34,5 +38,5 @@ for uc = 20:20:100
 	final_avg_usr_tp((uc/20),:) = [mean(avg_user_tputmt),mean(avg_user_tputtta),mean(avg_user_tputpf)];
 	final_jn_fnss_ndx((uc/20),:) = [mean(jain_fair_indexmt),mean(jain_fair_indextta),mean(jain_fair_indexpf)]; 
 
-disp('--');fflush(stdout);
+printf('\n--\n');fflush(stdout);
 end

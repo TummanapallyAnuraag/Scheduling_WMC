@@ -1,5 +1,5 @@
 function [Rbar] = getPastAvgTput(PF_allocation, MS, Rbar, TTI)
-	beta = 0.5;
+	beta = 0.8;
 	UserCount = length(MS);
 	if(TTI == 1)
 		Rbar = 0;
