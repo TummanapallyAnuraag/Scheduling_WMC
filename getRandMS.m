@@ -18,19 +18,23 @@ function [MS] = getRandMS(M = 10, Xc = 0, Yc = 0, Rc = 500)
 
     R = Rc*cos(pi/6);
 
+    % Coordinates of all Vertices
     X = Rc*[1, cos(pi/3), -cos(pi/3), -1, -cos(pi/3), cos(pi/3)];
     Y = Rc*[0, sin(pi/3), sin(pi/3), 0, -sin(pi/3), -sin(pi/3)];
 
+    % Surrounding BS vertices
     BSx = 2*R*cos( (0:5)*pi/3 );
     BSy = 2*R*sin( (0:5)*pi/3 );
 
     x_temp = -Rc + 2*Rc*rand(1,2.5*M);
     y_temp = -R + 2*R*rand(1,2.5*M);
 
+    % Check for Points inside the Hexagon and outside 1m distance form the BS
     flag = inpolygon(x_temp,y_temp,X,Y);
 	flag2 = ( sqrt(x_temp.^2 + y_temp.^2) > 1);
   	flag = flag & flag2;
 
+    % There should be M Points
 	if(sum(flag) >= M)
 		x_coordinate = x_temp(flag);
 		y_coordinate = y_temp(flag);
@@ -38,7 +42,7 @@ function [MS] = getRandMS(M = 10, Xc = 0, Yc = 0, Rc = 500)
 		y_coordinate = y_coordinate(1:M);
 
         for index = 1 : M
-            % Positions
+            % Positions, Indices and Distances of each UE
             MS(index).uid = index;
             MS(index).x = Xc + x_coordinate(index);
             MS(index).y = Yc + y_coordinate(index);

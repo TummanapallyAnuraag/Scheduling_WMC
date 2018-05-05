@@ -5,7 +5,7 @@ function [MS] = getSINRs(MS)
     % SINRk : For kth(single) Resource Block (RB)
 
     % CONSTANTS:
-    gamma = 4.5;
+    gamma = 3.5;
     N0 = 10^(-174/10);
     BW = 10*10^6;
     RB_BW = 180*10^3;
