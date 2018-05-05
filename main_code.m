@@ -19,3 +19,5 @@ xlabel('Time (milli seconds)');
 ylabel('Cell Throughput (bits per seconds)');
 legend('MT','TTA','PF');
 print(gcf,'-deps','-color',fullname);
+close;
+print('Pictures are all saved for Reference in pictures folder..');

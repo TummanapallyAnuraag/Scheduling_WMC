@@ -6,9 +6,9 @@ It's Aim is to simulate the *scheduling schemes* of LTE
 
 # Function Descriptions
 
-* main.m
+* main_code.m
 ```
-This is the mail file to run our simulation. Just use octave-cli and type "main" in the command line, or run it with Octave GUI
+This is the mail file to run our simulation. Just use octave-cli and type "main_code" in the command line, or run it with Octave GUI
 ```
 
 * getRandMS.m
